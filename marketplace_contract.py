@@ -59,7 +59,8 @@ class Product:
         return Cond(
             [Txn.application_id() == Int(0), self.application_creation()],
             [Txn.on_completion() == OnComplete.DeleteApplication, self.application_deletion()],
-            [Txn.application_args[0] == self.AppMethods.buy, self.buy]
+            [Txn.application_args[0] == Bytes("buy"), self.buy],
+            [Txn.application_args[0] != Bytes("buy"), Return(Int(1))]  
         )
     
     # approve and clear program
